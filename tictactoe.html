@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic Tac Toe Game</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+
+<div id="board" style="display: grid; grid-template-columns: repeat(3, 100px); grid-gap: 2px;"></div>
+
+<script>
+  const board = document.getElementById("board");
+  const cells = [];
+  let currentPlayer = "X";
+  let isGameOver = false;
+
+  // Create the game board
+  for (let i = 0; i < 9; i++) {
+    const cell = document.createElement("div");
+    cell.className = "cell";
+    cell.addEventListener("click", () => makeMove(i));
+    cells.push(cell);
+    cell.style.width = "100px";
+    cell.style.height = "100px";
+    cell.style.textAlign = "center";
+    cell.style.verticalAlign = "middle";
+    cell.style.fontSize = "40px";
+    cell.style.border = "1px solid black";
+    cell.style.cursor = "pointer";
+    cell.style.backgroundColor = "white";
+    board.appendChild(cell);
+  }
+
+  function makeMove(index) {
+    if (isGameOver || cells[index].textContent !== "") return;
+
+    cells[index].textContent = currentPlayer;
+    if (checkWin(currentPlayer)) {
+      alert(currentPlayer + " wins!");
+      isGameOver = true;
+    } else if (isBoardFull()) {
+      alert("It's a draw!");
+      isGameOver = true;
+    } else {
+      currentPlayer = currentPlayer === "X" ? "O" : "X";
+    }
+  }
+
+  function checkWin(player) {
+    const winCombos = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+    return winCombos.some(combo =>
+      combo.every(index => cells[index].textContent === player)
+    );
+  }
+
+  function isBoardFull() {
+    return cells.every(cell => cell.textContent !== "");
+  }
+</script>
+</body>
+</html>
